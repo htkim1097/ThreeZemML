@@ -22,11 +22,11 @@ def create_sequences(data, window_size, horizon):
     return np.array(X), np.array(y)
 
 # 데이터 로드
-host = "http://localhost"
+host = "http://192.168.219.101"
 port = "7770"
 baseUrl = f"{host}:{port}"
 url = baseUrl + "/api/energy/elec"
-params = { "start": "2023-10-23 12:00:00", "end": "2024-10-22 12:00:00", "datetimeType": 0}
+params = { "start": "2023-01-01 00:00:00", "end": "2025-01-01 00:00:00", "datetimeType": 0}
 response = requests.get(url, params=params)
 
 if (str(response.status_code) == "200"):
@@ -50,11 +50,9 @@ df.set_index('timestamp')
 
 results = []
 cnt = 0
-for i in range(1, 1095):
+for i in [2160, 4320, 8760]:
     temp = {}
-    for j in range(1, 365):
-        if i < j:
-            continue
+    for j in [2160, 4320, 8760]:
         # 데이터 분할(슬라이딩 윈도우)
         window_size = i  # 과거 데이터를 보고
         horizon = j  # 다음의 데이터를 예측
