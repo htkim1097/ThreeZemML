@@ -7,5 +7,12 @@ router = APIRouter()
 
 @router.post("/", response_model=PredictResponse)
 def predict(request: PredictRequest):
-    result = predict_service(request)
-    return PredictResponse(prediction=result)
+    elec_prediction = predict_service('elec', request.electricityReadings)
+    gas_prediction = predict_service('gas', request.gasReadings)
+    water_prediction = predict_service('water', request.waterReadings)
+    
+    return PredictResponse(
+        elecPredictions=elec_prediction,
+        gasPredictions=gas_prediction,
+        waterPredictions=water_prediction
+    )

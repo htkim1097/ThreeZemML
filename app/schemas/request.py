@@ -1,5 +1,8 @@
 from pydantic import BaseModel
-from typing import List
+from app.schemas.readings import EnergyReadings
 
 class PredictRequest(BaseModel):
-    features: List[float]
+    electricityReadings: EnergyReadings
+    gasReadings: EnergyReadings
+    waterReadings: EnergyReadings
+

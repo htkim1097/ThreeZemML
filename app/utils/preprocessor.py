@@ -1,34 +1,26 @@
 import numpy as np
 
-def preprocess(features):
+def create_sequences(data, window_size, horizon):             
+    X = []                                           
+    # 전체 데이터에서 윈도우를 만들 수 있는 만큼 반복
+    for i in range(len(data) - window_size - horizon + 1):
+        window = data[i:(i + window_size)]           
+        X.append(window)  
+    return np.array(X)
+
+def preprocess(usage_data: list[float]) -> np.ndarray:
     """
-    클라이언트에서 받은 입력값(features)을
+    클라이언트에서 받은 입력값(usage_data)을
     모델이 예측할 수 있는 형태로 전처리합니다.
     """
-    # 예: None 또는 문자열이 섞여있을 수 있으므로 변환
-    clean_features = []
-    for f in features:
-        try:
-            clean_features.append(float(f))
-        except (ValueError, TypeError):
-            clean_features.append(0.0)  # 기본값 대체
-    
+    # train_model.py와 동일한 조건으로 설정
+    window_size = 4320
+    horizon = 8760
+
     # numpy array로 변환
-    x = np.array(clean_features, dtype=np.float32)
+    usage_arr = np.array(usage_data, dtype=np.float32)
 
-    # 추가로 스케일링 예시 (선택)
-    # x = (x - x.mean()) / (x.std() + 1e-8)
+    # 예측에 사용할 입력 시퀀스 생성
+    X = create_sequences(usage_arr, window_size, horizon)
     
-    return x
-
-
-# def preprocess(features):
-#     """
-#     입력값(features)을 numpy 배열로 변환.
-#     여기서는 간단히 수치형 리스트만 처리.
-#     """
-#     try:
-#         x = np.array(features, dtype=np.float32).reshape(1, -1)
-#     except Exception as e:
-#         raise ValueError(f"Invalid features format: {e}")
-#     return x
+    return X

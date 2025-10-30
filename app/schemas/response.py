@@ -1,9 +1,7 @@
 from pydantic import BaseModel
+from typing import List, Dict, Any
 
 class PredictResponse(BaseModel):
-    prediction: float
-
-
-# class PredictResponse(BaseModel):
-#     class_index: int
-#     class_label: str
+    elecPredictions: List[Dict[str, Any]]
+    gasPredictions: List[Dict[str, Any]]
+    waterPredictions: List[Dict[str, Any]]
